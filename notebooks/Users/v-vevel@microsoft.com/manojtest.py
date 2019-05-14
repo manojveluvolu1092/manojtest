@@ -73,3 +73,4 @@ display(dbutils.fs.ls("dbfs:/cluster-logs/0514-170154-lured342/init_scripts/0514
 
 # COMMAND ----------
 
+notebooks/Users/v-vevel@microsoft.com/githubcheck
