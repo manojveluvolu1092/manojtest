@@ -73,4 +73,100 @@ display(dbutils.fs.ls("dbfs:/cluster-logs/0514-170154-lured342/init_scripts/0514
 
 # COMMAND ----------
 
-notebooks/Users/v-vevel@microsoft.com/githubcheck
+/Users/v-vevel@microsoft.com/
+
+# COMMAND ----------
+
+# MAGIC %sh
+# MAGIC 
+# MAGIC ls /databricks/hive/conf/hive-site.xml
+
+# COMMAND ----------
+
+cat /databricks/hive/conf/hive-site.xml
+
+# COMMAND ----------
+
+# MAGIC %sh 
+# MAGIC 
+# MAGIC ls /databricks/hive/conf/
+
+# COMMAND ----------
+
+# MAGIC %sh 
+# MAGIC 
+# MAGIC cat /databricks/hive/conf/hive-site.xml
+
+# COMMAND ----------
+
+# MAGIC %scala
+# MAGIC 
+# MAGIC dbutils.fs.put(
+# MAGIC     "/databricks/init/manojcluster/external-metastore.sh",
+# MAGIC     """#!/bin/sh
+# MAGIC       |# Loads environment variables to determine the correct JDBC driver to use.
+# MAGIC       |source /etc/environment
+# MAGIC       |# Quoting the label (i.e. EOF) with single quotes to disable variable interpolation.
+# MAGIC       |cat << 'EOF' > /databricks/driver/conf/00-custom-spark.conf
+# MAGIC       |[driver] {
+# MAGIC       |    # Hive specific configuration options for metastores in the local mode.
+# MAGIC       |    # spark.hadoop prefix is added to make sure these Hive specific options will propagate to the metastore client.
+# MAGIC       |    "spark.hadoop.javax.jdo.option.ConnectionURL" = "jdbc:mysql://<mysql-host>:<mysql-port>/<metastore-db>"
+# MAGIC       |    "spark.hadoop.javax.jdo.option.ConnectionUserName" = "<mysql-username>"
+# MAGIC       |    "spark.hadoop.javax.jdo.option.ConnectionPassword" = "<mysql-password>"
+# MAGIC       |
+# MAGIC       |    # Spark specific configuration options
+# MAGIC       |    "spark.sql.hive.metastore.version" = "<hive-version>"
+# MAGIC       |    # Skip this one if <hive-version> is 0.13.x.
+# MAGIC       |    "spark.sql.hive.metastore.jars" = "<hive-jar-source>"
+# MAGIC       |
+# MAGIC       |    # If any of your table or database use s3 as the file system scheme,
+# MAGIC       |    # uncomment the next line to set the s3:// URL scheme to S3A file system.
+# MAGIC       |    # spark.hadoop prefix is added to make sure these file system options will
+# MAGIC       |    # propagate to the metastore client and Hadoop configuration.
+# MAGIC       |    # "spark.hadoop.fs.s3.impl" = "com.databricks.s3a.S3AFileSystem"
+# MAGIC       |
+# MAGIC       |    # If you need to use AssumeRole, uncomment the following settings.
+# MAGIC       |    # "spark.hadoop.fs.s3a.impl" = "com.databricks.s3a.S3AFileSystem"
+# MAGIC       |    # "spark.hadoop.fs.s3n.impl" = "com.databricks.s3a.S3AFileSystem"
+# MAGIC       |    # "spark.hadoop.fs.s3a.credentialsType" = "AssumeRole"
+# MAGIC       |    # "spark.hadoop.fs.s3a.stsAssumeRole.arn" = "<sts-arn>"
+# MAGIC       |EOF
+# MAGIC       |
+# MAGIC       |case "$DATABRICKS_RUNTIME_VERSION" in
+# MAGIC       |  "")
+# MAGIC       |     DRIVER="com.mysql.jdbc.Driver"
+# MAGIC       |     ;;
+# MAGIC       |  *)
+# MAGIC       |     DRIVER="org.mariadb.jdbc.Driver"
+# MAGIC       |     ;;
+# MAGIC       |esac
+# MAGIC       |# Add the JDBC driver separately since must use variable expansion to choose the correct
+# MAGIC       |# driver version.
+# MAGIC       |cat << EOF >> /databricks/driver/conf/00-custom-spark.conf
+# MAGIC       |    "spark.hadoop.javax.jdo.option.ConnectionDriverName" = "$DRIVER"
+# MAGIC       |}
+# MAGIC       |EOF
+# MAGIC       |""".stripMargin,
+# MAGIC     overwrite = true
+# MAGIC )
+
+# COMMAND ----------
+
+# MAGIC 
+# MAGIC %sh
+# MAGIC 
+# MAGIC cat /databricks/hive/conf/hive-site.xml
+
+# COMMAND ----------
+
+# MAGIC %sh
+# MAGIC nc -vz <DNS name> <port>
+
+# COMMAND ----------
+
+1 + 1
+
+
+# COMMAND ----------
+
