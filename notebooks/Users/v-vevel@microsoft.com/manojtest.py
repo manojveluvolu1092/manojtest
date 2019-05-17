@@ -170,3 +170,7 @@ cat /databricks/hive/conf/hive-site.xml
 
 # COMMAND ----------
 
+2 + 1
+
+# COMMAND ----------
+
